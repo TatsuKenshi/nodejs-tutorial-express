@@ -1,12 +1,13 @@
 const express = require("express");
 const app = express();
-const logger = require("./working-lessons/10-middleware-logger");
-const authorize = require("./working-lessons/11-middleware-authorize");
+const logger = require("./10-middleware-logger");
+const authorize = require("./11-middleware-authorize");
 const morgan = require("morgan");
 // req => middleware func => res
 // app.use([logger, authorize]);
 
 // 1. use vs route
+// we can pass middleware through app.use() or directly in the app.get() route
 // 2. options:
 // a) out own functions
 // b) express built-in functions
