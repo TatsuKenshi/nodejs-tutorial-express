@@ -1,35 +1,33 @@
 const express = require("express");
 const app = express();
-const logger = require("./working-lessons/10-middleware-logger");
-const authorize = require("./working-lessons/11-middleware-authorize");
-const morgan = require("morgan");
-// req => middleware func => res
-// app.use([logger, authorize]);
+let { people } = require("./data");
 
-// 1. use vs route
-// 2. options:
-// a) out own functions
-// b) express built-in functions
-// app.use(express.static("./public"));
-// c) 3rd-party
-// app.use(morgan("tiny"));
+// static assets
+app.use(express.static("./methods-public"));
 
-app.get("/", (req, res) => {
-  // express will send the req object as the parameter to the logger (or another middleware) function by default
-  res.send("Home Page");
-});
-app.get("/about", (req, res) => {
-  res.send("About Page");
+// parse the html form data
+app.use(express.urlencoded({ extended: false }));
+
+// get
+app.get("/api/people", (req, res) => {
+  res.status(200).json({ success: true, data: people });
 });
 
-app.get("/api/products", (req, res) => {
-  res.send("Products Page");
-});
-app.get("/api/items", (req, res) => {
-  console.log(req.user);
-  res.send("Items Page");
+// post
+app.post("/login", (req, res) => {
+  const { name } = req.body;
+  if (name) {
+    return res.status(200).send(`Welcome ${name}`);
+  }
+  res.status(401).send("Please provide credentials");
 });
 
 app.listen(5000, () => {
   console.log("Server is listening on port : 5000...");
 });
+
+// get - read data
+// post - insert data (place order, enter product into the table)
+// put - update data (overwrite the entire entry)
+// patch - update data (add data, overwrite specified fields)
+// delete - delete data
